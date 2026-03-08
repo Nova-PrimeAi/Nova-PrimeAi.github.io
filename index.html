@@ -1,18 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Nova AI</title>
+  <title>Nova-Prime AI</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #00ffea;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    #chat-box {
+      width: 400px;
+      height: 500px;
+      border: 2px solid #00ffea;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #121212;
+      margin-bottom: 10px;
+    }
+    #user-input {
+      width: 400px;
+      padding: 10px;
+      border: 2px solid #00ffea;
+      background-color: #0d0d0d;
+      color: #00ffea;
+    }
+    #status {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1>Nova AI</h1>
-  <p id="status">Starting Nova...</p>
 
-  <script>
-    // This runs automatically when the website opens
-    window.onload = function() {
-      document.getElementById("status").innerText = "Nova is online! How can I help?";
-      alert("Hello! Nova AI is now active."); // pops up a greeting
+<h1>Nova-Prime AI</h1>
+<p id="status">Status: Starting Nova...</p>
+
+<div id="chat-box"></div>
+<input type="text" id="user-input" placeholder="Type here and press Enter..." />
+
+<script>
+  const chatBox = document.getElementById('chat-box');
+  const userInput = document.getElementById('user-input');
+  const status = document.getElementById('status');
+
+  // Auto-start Nova
+  window.onload = () => {
+    status.innerText = "Status: Nova is online!";
+    addMessage("Nova", "Hello! I am Nova-Prime. How can I help you today?");
+  }
+
+  // Display messages
+  function addMessage(sender, text) {
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatBox.appendChild(p);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // Handle user input
+  userInput.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' && userInput.value.trim() !== "") {
+      addMessage("You", userInput.value);
+      // Example auto-response
+      setTimeout(() => addMessage("Nova", "Processing: " + userInput.value), 500);
+      userInput.value = "";
     }
-  </script>
+  });
+</script>
+
 </body>
 </html>
