@@ -1,76 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Nova-Prime AI</title>
-  <style>
-    body {
-      background-color: #0d0d0d;
-      color: #00ffea;
-      font-family: 'Courier New', monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    #chat-box {
-      width: 400px;
-      height: 500px;
-      border: 2px solid #00ffea;
-      padding: 10px;
-      overflow-y: auto;
-      background-color: #121212;
-      margin-bottom: 10px;
-    }
-    #user-input {
-      width: 400px;
-      padding: 10px;
-      border: 2px solid #00ffea;
-      background-color: #0d0d0d;
-      color: #00ffea;
-    }
-    #status {
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-  </style>
+<title>Nova AI</title>
+
+<style>
+body{
+  background:black;
+  color:#00ff9c;
+  font-family:monospace;
+  padding:20px;
+}
+
+#terminal{
+  white-space:pre-line;
+  font-size:18px;
+}
+</style>
 </head>
+
 <body>
 
 <h1>Nova-Prime AI</h1>
-<p id="status">Status: Starting Nova...</p>
-
-<div id="chat-box"></div>
-<input type="text" id="user-input" placeholder="Type here and press Enter..." />
+<div id="terminal"></div>
 
 <script>
-  const chatBox = document.getElementById('chat-box');
-  const userInput = document.getElementById('user-input');
-  const status = document.getElementById('status');
+const lines = [
+"Initializing Nova-Core...",
+"Loading neural modules...",
+"Connecting to AI network...",
+"Calibrating voice systems...",
+"Synchronizing data streams...",
+"Boot sequence complete.",
+"",
+"Nova-Prime is now ONLINE.",
+"Awaiting your command..."
+];
 
-  // Auto-start Nova
-  window.onload = () => {
-    status.innerText = "Status: Nova is online!";
-    addMessage("Nova", "Hello! I am Nova-Prime. How can I help you today?");
+let i = 0;
+
+function typeLine(){
+  if(i < lines.length){
+    document.getElementById("terminal").innerHTML += lines[i] + "\n";
+    i++;
+    setTimeout(typeLine, 800);
   }
+}
 
-  // Display messages
-  function addMessage(sender, text) {
-    const p = document.createElement('p');
-    p.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chatBox.appendChild(p);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  // Handle user input
-  userInput.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter' && userInput.value.trim() !== "") {
-      addMessage("You", userInput.value);
-      // Example auto-response
-      setTimeout(() => addMessage("Nova", "Processing: " + userInput.value), 500);
-      userInput.value = "";
-    }
-  });
+typeLine();
 </script>
 
 </body>
