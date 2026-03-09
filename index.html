@@ -3,6 +3,8 @@
 <head>
 <title>Nova-Prime AI</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 
 body{
@@ -10,49 +12,52 @@ background:#0a0a0a;
 color:#00ffc8;
 font-family:monospace;
 margin:0;
-padding:0;
 }
 
 /* Boot screen */
+
 #boot{
-padding:40px;
-font-size:32px;
-line-height:1.6;
+padding:20px;
+font-size:6vw;
+line-height:1.5;
 }
 
 /* Chat UI */
+
 #chatUI{
 display:none;
 height:100vh;
-display:flex;
 flex-direction:column;
 }
 
 #header{
 background:#111;
-padding:20px;
-font-size:28px;
+padding:15px;
+font-size:6vw;
+text-align:center;
 border-bottom:2px solid #00ffc8;
 }
 
 #chatbox{
 flex:1;
-padding:20px;
 overflow-y:auto;
-font-size:20px;
+padding:15px;
+font-size:4.5vw;
 }
 
 .message{
-margin-bottom:15px;
+margin-bottom:12px;
 }
 
 .user{
-color:#ffffff;
+color:white;
 }
 
 .nova{
 color:#00ffc8;
 }
+
+/* Input area */
 
 #inputArea{
 display:flex;
@@ -62,7 +67,7 @@ border-top:2px solid #00ffc8;
 #msg{
 flex:1;
 padding:15px;
-font-size:18px;
+font-size:4.5vw;
 background:#0a0a0a;
 color:white;
 border:none;
@@ -70,11 +75,10 @@ outline:none;
 }
 
 button{
-width:120px;
+width:25%;
 background:#00ffc8;
 border:none;
-font-size:18px;
-cursor:pointer;
+font-size:4.5vw;
 }
 
 </style>
@@ -161,9 +165,7 @@ if(input.value.trim()==="") return;
 addMessage("user",input.value);
 
 setTimeout(()=>{
-
 addMessage("nova","Processing: "+input.value);
-
 },600);
 
 input.value="";
