@@ -1,29 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Nova AI</title>
+<title>Nova-Prime AI</title>
 
 <style>
 body{
   background:black;
   color:#00ff9c;
   font-family:monospace;
+  margin:0;
   padding:20px;
 }
 
-#terminal{
+#boot{
   white-space:pre-line;
-  font-size:18px;
+}
+
+#mainUI{
+  display:none;
+}
+
+button{
+  background:#00ff9c;
+  border:none;
+  padding:10px;
+  margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Nova-Prime AI</h1>
-<div id="terminal"></div>
+<div id="boot"></div>
+
+<div id="mainUI">
+  <h1>Nova-Prime AI</h1>
+  <p>System Ready.</p>
+  <input placeholder="Type your command..." style="padding:8px;width:300px;">
+  <br>
+  <button>Send</button>
+</div>
 
 <script>
+
 const lines = [
 "Initializing Nova-Core...",
 "Loading neural modules...",
@@ -31,22 +50,29 @@ const lines = [
 "Calibrating voice systems...",
 "Synchronizing data streams...",
 "Boot sequence complete.",
-"",
-"Nova-Prime is now ONLINE.",
-"Awaiting your command..."
+"Launching Nova interface..."
 ];
 
 let i = 0;
+const boot = document.getElementById("boot");
 
-function typeLine(){
+function bootSequence(){
   if(i < lines.length){
-    document.getElementById("terminal").innerHTML += lines[i] + "\n";
+    boot.innerHTML += lines[i] + "<br>";
     i++;
-    setTimeout(typeLine, 800);
+    setTimeout(bootSequence,700);
+  }else{
+    startUI();
   }
 }
 
-typeLine();
+function startUI(){
+  document.getElementById("boot").style.display="none";
+  document.getElementById("mainUI").style.display="block";
+}
+
+window.onload = bootSequence;
+
 </script>
 
 </body>
