@@ -12,6 +12,7 @@ color:#00ffc8;
 font-family:monospace;
 }
 
+/* Boot screen */
 #boot{
 padding:20px;
 font-size:26px;
@@ -115,6 +116,7 @@ color:#00ffc8;
 
 <div id="boot"></div>
 
+<!-- Desktop UI -->
 <div id="desktopUI">
 <div id="desktopHeader">Nova-Prime AI</div>
 <div id="desktopChat"></div>
@@ -124,6 +126,7 @@ color:#00ffc8;
 </div>
 </div>
 
+<!-- Mobile UI -->
 <div id="mobileUI">
 <div id="mobileHeader">Nova-Prime AI</div>
 <div id="mobileChat"></div>
@@ -134,6 +137,7 @@ color:#00ffc8;
 </div>
 
 <script>
+/* Boot sequence */
 const lines=[
 "Initializing Nova-Core...",
 "Loading neural modules...",
@@ -142,14 +146,15 @@ const lines=[
 "Boot sequence complete.",
 "Launching interface..."
 ];
-
 let i=0;
 const boot=document.getElementById("boot");
 
+/* Detect mobile */
 function isMobile(){
 return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 }
 
+/* Boot animation */
 function bootSeq(){
 if(i<lines.length){
 boot.innerHTML+=lines[i]+"<br>";
@@ -160,6 +165,7 @@ startUI();
 }
 }
 
+/* Start UI */
 function startUI(){
 boot.style.display="none";
 if(isMobile()){
@@ -172,6 +178,7 @@ addMessage("desktopChat","nova","Hello. I am Nova-Prime.");
 }
 }
 
+/* Add message */
 function addMessage(chatId,sender,text){
 const chat=document.getElementById(chatId);
 const div=document.createElement("div");
@@ -181,22 +188,41 @@ chat.appendChild(div);
 chat.scrollTop=chat.scrollHeight;
 }
 
+/* AI logic */
+function generateReply(message){
+const msg = message.toLowerCase();
+if(msg.includes("hello") || msg.includes("hi")) return "Hello! How can I help you today?";
+if(msg.includes("your name")) return "I am Nova-Prime, your AI assistant.";
+if(msg.includes("time")) return "I can't check the real time yet, but you can look at your device clock!";
+return "I am processing your request...";
+}
+
+/* Chat function */
+function chat(userMessage, chatId){
+addMessage(chatId,"user",userMessage);
+setTimeout(()=>{
+const reply = generateReply(userMessage);
+addMessage(chatId,"nova",reply);
+},800);
+}
+
+/* Desktop send */
 function sendDesktop(){
 const input=document.getElementById("desktopMsg");
 if(input.value.trim()==="") return;
-addMessage("desktopChat","user",input.value);
-setTimeout(()=>{addMessage("desktopChat","nova","Processing: "+input.value);},500);
+chat(input.value,"desktopChat");
 input.value="";
 }
 
+/* Mobile send */
 function sendMobile(){
 const input=document.getElementById("mobileMsg");
 if(input.value.trim()==="") return;
-addMessage("mobileChat","user",input.value);
-setTimeout(()=>{addMessage("mobileChat","nova","Processing: "+input.value);},500);
+chat(input.value,"mobileChat");
 input.value="";
 }
 
+/* ChatGPT-style keyboard movement */
 function setupMobileKeyboardFix(){
 const inputBar=document.getElementById("mobileInput");
 if(window.visualViewport){
@@ -213,6 +239,7 @@ inputBar.style.bottom="0px";
 }
 }
 
+/* Start boot */
 window.onload=bootSeq;
 </script>
 
