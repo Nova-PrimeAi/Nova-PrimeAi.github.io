@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-
-/* General */
-
 body{
 margin:0;
 background:#0a0a0a;
@@ -15,41 +12,34 @@ color:#00ffc8;
 font-family:monospace;
 }
 
-/* Boot screen */
-
 #boot{
 padding:20px;
-font-size:28px;
+font-size:26px;
 line-height:1.6;
 }
 
 /* Desktop UI */
-
 #desktopUI{
 display:none;
 height:100vh;
 flex-direction:column;
 }
-
 #desktopHeader{
 background:#111;
 padding:20px;
 font-size:26px;
 border-bottom:2px solid #00ffc8;
 }
-
 #desktopChat{
 flex:1;
-padding:20px;
 overflow-y:auto;
+padding:20px;
 font-size:18px;
 }
-
 #desktopInput{
 display:flex;
 border-top:2px solid #00ffc8;
 }
-
 #desktopInput input{
 flex:1;
 padding:15px;
@@ -58,7 +48,6 @@ color:white;
 border:none;
 font-size:18px;
 }
-
 #desktopInput button{
 width:120px;
 background:#00ffc8;
@@ -66,13 +55,11 @@ border:none;
 }
 
 /* Mobile UI */
-
 #mobileUI{
 display:none;
 height:100vh;
 flex-direction:column;
 }
-
 #mobileHeader{
 background:#111;
 padding:15px;
@@ -80,19 +67,22 @@ font-size:6vw;
 text-align:center;
 border-bottom:2px solid #00ffc8;
 }
-
 #mobileChat{
 flex:1;
-padding:15px;
 overflow-y:auto;
+padding:15px;
 font-size:4.5vw;
+margin-bottom:80px;
 }
-
 #mobileInput{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
 display:flex;
 border-top:2px solid #00ffc8;
+background:#0a0a0a;
 }
-
 #mobileInput input{
 flex:1;
 padding:15px;
@@ -100,8 +90,8 @@ background:#0a0a0a;
 color:white;
 border:none;
 font-size:4.5vw;
+outline:none;
 }
-
 #mobileInput button{
 width:25%;
 background:#00ffc8;
@@ -112,10 +102,12 @@ font-size:4.5vw;
 .message{
 margin-bottom:12px;
 }
-
-.user{color:white;}
-.nova{color:#00ffc8;}
-
+.user{
+color:white;
+}
+.nova{
+color:#00ffc8;
+}
 </style>
 </head>
 
@@ -123,153 +115,105 @@ margin-bottom:12px;
 
 <div id="boot"></div>
 
-<!-- Desktop UI -->
-
 <div id="desktopUI">
-
 <div id="desktopHeader">Nova-Prime AI</div>
-
 <div id="desktopChat"></div>
-
 <div id="desktopInput">
 <input id="desktopMsg" placeholder="Message Nova...">
 <button onclick="sendDesktop()">Send</button>
 </div>
-
 </div>
 
-<!-- Mobile UI -->
-
 <div id="mobileUI">
-
 <div id="mobileHeader">Nova-Prime AI</div>
-
 <div id="mobileChat"></div>
-
 <div id="mobileInput">
 <input id="mobileMsg" placeholder="Message Nova...">
 <button onclick="sendMobile()">Send</button>
 </div>
-
 </div>
 
 <script>
-
-/* Boot lines */
-
 const lines=[
 "Initializing Nova-Core...",
 "Loading neural modules...",
 "Connecting to AI network...",
 "Calibrating systems...",
 "Boot sequence complete.",
-"Launching Nova interface..."
+"Launching interface..."
 ];
 
 let i=0;
 const boot=document.getElementById("boot");
 
-/* Detect mobile */
-
 function isMobile(){
 return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 }
 
-/* Boot animation */
-
 function bootSeq(){
-
 if(i<lines.length){
-
 boot.innerHTML+=lines[i]+"<br>";
 i++;
-
 setTimeout(bootSeq,700);
-
 }else{
-
 startUI();
-
 }
-
 }
-
-/* Start correct UI */
 
 function startUI(){
-
 boot.style.display="none";
-
 if(isMobile()){
-
 document.getElementById("mobileUI").style.display="flex";
 addMessage("mobileChat","nova","Hello. I am Nova-Prime.");
-
+setupMobileKeyboardFix();
 }else{
-
 document.getElementById("desktopUI").style.display="flex";
 addMessage("desktopChat","nova","Hello. I am Nova-Prime.");
-
 }
-
 }
-
-/* Add message */
 
 function addMessage(chatId,sender,text){
-
 const chat=document.getElementById(chatId);
-
 const div=document.createElement("div");
-
 div.className="message "+sender;
-
 div.innerText=(sender==="user"?"You: ":"Nova: ")+text;
-
 chat.appendChild(div);
-
 chat.scrollTop=chat.scrollHeight;
-
 }
-
-/* Desktop send */
 
 function sendDesktop(){
-
 const input=document.getElementById("desktopMsg");
-
 if(input.value.trim()==="") return;
-
 addMessage("desktopChat","user",input.value);
-
-setTimeout(()=>{
-addMessage("desktopChat","nova","Processing: "+input.value);
-},500);
-
+setTimeout(()=>{addMessage("desktopChat","nova","Processing: "+input.value);},500);
 input.value="";
-
 }
 
-/* Mobile send */
-
 function sendMobile(){
-
 const input=document.getElementById("mobileMsg");
-
 if(input.value.trim()==="") return;
-
 addMessage("mobileChat","user",input.value);
-
-setTimeout(()=>{
-addMessage("mobileChat","nova","Processing: "+input.value);
-},500);
-
+setTimeout(()=>{addMessage("mobileChat","nova","Processing: "+input.value);},500);
 input.value="";
+}
 
+function setupMobileKeyboardFix(){
+const inputBar=document.getElementById("mobileInput");
+if(window.visualViewport){
+window.visualViewport.addEventListener("resize",()=>{
+const viewportHeight=window.visualViewport.height;
+const windowHeight=window.innerHeight;
+const keyboardHeight=windowHeight-viewportHeight;
+if(keyboardHeight>0){
+inputBar.style.bottom=keyboardHeight+"px";
+}else{
+inputBar.style.bottom="0px";
+}
+});
+}
 }
 
 window.onload=bootSeq;
-
 </script>
 
 </body>
