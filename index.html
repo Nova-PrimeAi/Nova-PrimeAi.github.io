@@ -1,247 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Nova-Prime AI</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
-body{
-margin:0;
-background:#0a0a0a;
-color:#00ffc8;
-font-family:monospace;
-}
-
-/* Boot screen */
-#boot{
-padding:20px;
-font-size:26px;
-line-height:1.6;
-}
-
-/* Desktop UI */
-#desktopUI{
-display:none;
-height:100vh;
-flex-direction:column;
-}
-#desktopHeader{
-background:#111;
-padding:20px;
-font-size:26px;
-border-bottom:2px solid #00ffc8;
-}
-#desktopChat{
-flex:1;
-overflow-y:auto;
-padding:20px;
-font-size:18px;
-}
-#desktopInput{
-display:flex;
-border-top:2px solid #00ffc8;
-}
-#desktopInput input{
-flex:1;
-padding:15px;
-background:#0a0a0a;
-color:white;
-border:none;
-font-size:18px;
-}
-#desktopInput button{
-width:120px;
-background:#00ffc8;
-border:none;
-}
-
-/* Mobile UI */
-#mobileUI{
-display:none;
-height:100vh;
-flex-direction:column;
-}
-#mobileHeader{
-background:#111;
-padding:15px;
-font-size:6vw;
-text-align:center;
-border-bottom:2px solid #00ffc8;
-}
-#mobileChat{
-flex:1;
-overflow-y:auto;
-padding:15px;
-font-size:4.5vw;
-margin-bottom:80px;
-}
-#mobileInput{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-display:flex;
-border-top:2px solid #00ffc8;
-background:#0a0a0a;
-}
-#mobileInput input{
-flex:1;
-padding:15px;
-background:#0a0a0a;
-color:white;
-border:none;
-font-size:4.5vw;
-outline:none;
-}
-#mobileInput button{
-width:25%;
-background:#00ffc8;
-border:none;
-font-size:4.5vw;
-}
-
-.message{
-margin-bottom:12px;
-}
-.user{
-color:white;
-}
-.nova{
-color:#00ffc8;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #000000; color: #ffffff; font-family: ui-sans-serif, system-ui, sans-serif; }
+        .sidebar-bg { background-color: #000000; border-right: 1px solid #2d2d2d; }
+        .input-bg { background-color: #1a1a1a; border: 1px solid #333333; }
+        .text-muted { color: #8e8e8e; }
+    </style>
 </head>
+<body class="flex h-screen overflow-hidden">
 
-<body>
+    <div class="w-12 flex flex-col items-center py-4 gap-6 sidebar-bg border-r border-gray-800">
+        <i class="fa-regular fa-comment-dots text-xl text-gray-400"></i>
+        <i class="fa-solid fa-sliders text-xl text-gray-400"></i>
+        <i class="fa-solid fa-pencil text-xl text-gray-400"></i>
+        <i class="fa-regular fa-file-lines text-xl text-gray-400"></i>
+        <i class="fa-solid fa-book text-xl text-gray-400"></i>
+        <i class="fa-regular fa-face-smile text-xl text-gray-400"></i>
+    </div>
 
-<div id="boot"></div>
+    <div class="w-64 sidebar-bg flex flex-col p-4">
+        <div class="relative mb-4">
+            <button class="w-full text-left bg-transparent border border-gray-700 rounded-md p-2 text-sm flex justify-between items-center">
+                Select workspace...
+                <i class="fa-solid fa-chevron-up text-[10px]"></i>
+            </button>
+        </div>
 
-<!-- Desktop UI -->
-<div id="desktopUI">
-<div id="desktopHeader">Nova-Prime AI</div>
-<div id="desktopChat"></div>
-<div id="desktopInput">
-<input id="desktopMsg" placeholder="Message Nova...">
-<button onclick="sendDesktop()">Send</button>
-</div>
-</div>
+        <div class="flex gap-2 mb-4">
+            <button class="flex-1 bg-white text-black font-medium py-2 rounded-md text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus"></i> New Chat
+            </button>
+            <button class="px-3 border border-gray-700 rounded-md">
+                <i class="fa-solid fa-folder-plus text-gray-400"></i>
+            </button>
+        </div>
 
-<!-- Mobile UI -->
-<div id="mobileUI">
-<div id="mobileHeader">Nova-Prime AI</div>
-<div id="mobileChat"></div>
-<div id="mobileInput">
-<input id="mobileMsg" placeholder="Message Nova...">
-<button onclick="sendMobile()">Send</button>
-</div>
-</div>
+        <div class="relative mb-8">
+            <input type="text" placeholder="Search chats..." class="w-full bg-[#111] border border-gray-800 rounded-md p-2 text-xs outline-none">
+        </div>
 
-<script>
-/* Boot sequence */
-const lines=[
-"Initializing Nova-Core...",
-"Loading neural modules...",
-"Connecting to AI network...",
-"Calibrating systems...",
-"Boot sequence complete.",
-"Launching interface..."
-];
-let i=0;
-const boot=document.getElementById("boot");
+        <div class="flex-1 flex items-center justify-center italic text-gray-500 text-sm">
+            No chats.
+        </div>
+    </div>
 
-/* Detect mobile */
-function isMobile(){
-return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
-}
+    <main class="flex-1 flex flex-col relative bg-[#0d0d0d]">
+        
+        <header class="flex justify-between items-center px-6 py-4">
+            <div class="flex items-center gap-1 cursor-pointer">
+                <span class="text-sm font-semibold">Quick Settings</span>
+                <i class="fa-solid fa-chevron-down text-[10px]"></i>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-medium">GPT-4 Turbo</span>
+                <i class="fa-solid fa-sliders text-sm"></i>
+            </div>
+        </header>
 
-/* Boot animation */
-function bootSeq(){
-if(i<lines.length){
-boot.innerHTML+=lines[i]+"<br>";
-i++;
-setTimeout(bootSeq,700);
-}else{
-startUI();
-}
-}
+        <div class="flex-1 flex flex-col items-center justify-center -mt-20">
+            <div class="bg-white text-black w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                <span class="font-bold text-xl">UI</span>
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight">Chatbot UI</h1>
+        </div>
 
-/* Start UI */
-function startUI(){
-boot.style.display="none";
-if(isMobile()){
-document.getElementById("mobileUI").style.display="flex";
-addMessage("mobileChat","nova","Hello. I am Nova-Prime.");
-setupMobileKeyboardFix();
-}else{
-document.getElementById("desktopUI").style.display="flex";
-addMessage("desktopChat","nova","Hello. I am Nova-Prime.");
-}
-}
+        <div class="p-6 pb-10 flex justify-center">
+            <div class="w-full max-w-3xl relative">
+                <div class="input-bg rounded-xl flex items-center p-3">
+                    <button class="text-gray-400 hover:text-white px-2">
+                        <i class="fa-solid fa-circle-plus text-xl"></i>
+                    </button>
+                    <input type="text" placeholder="Send a message..." class="bg-transparent flex-1 outline-none text-sm px-2">
+                    <button class="text-gray-600 px-2">
+                        <i class="fa-solid fa-paper-plane text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-/* Add message */
-function addMessage(chatId,sender,text){
-const chat=document.getElementById(chatId);
-const div=document.createElement("div");
-div.className="message "+sender;
-div.innerText=(sender==="user"?"You: ":"Nova: ")+text;
-chat.appendChild(div);
-chat.scrollTop=chat.scrollHeight;
-}
-
-/* AI logic */
-function generateReply(message){
-const msg = message.toLowerCase();
-if(msg.includes("hello") || msg.includes("hi")) return "Hello! How can I help you today?";
-if(msg.includes("your name")) return "I am Nova-Prime, your AI assistant.";
-if(msg.includes("time")) return "I can't check the real time yet, but you can look at your device clock!";
-return "I am processing your request...";
-}
-
-/* Chat function */
-function chat(userMessage, chatId){
-addMessage(chatId,"user",userMessage);
-setTimeout(()=>{
-const reply = generateReply(userMessage);
-addMessage(chatId,"nova",reply);
-},800);
-}
-
-/* Desktop send */
-function sendDesktop(){
-const input=document.getElementById("desktopMsg");
-if(input.value.trim()==="") return;
-chat(input.value,"desktopChat");
-input.value="";
-}
-
-/* Mobile send */
-function sendMobile(){
-const input=document.getElementById("mobileMsg");
-if(input.value.trim()==="") return;
-chat(input.value,"mobileChat");
-input.value="";
-}
-
-/* ChatGPT-style keyboard movement */
-function setupMobileKeyboardFix(){
-const inputBar=document.getElementById("mobileInput");
-if(window.visualViewport){
-window.visualViewport.addEventListener("resize",()=>{
-const viewportHeight=window.visualViewport.height;
-const windowHeight=window.innerHeight;
-const keyboardHeight=windowHeight-viewportHeight;
-if(keyboardHeight>0){
-inputBar.style.bottom=keyboardHeight+"px";
-}else{
-inputBar.style.bottom="0px";
-}
-});
-}
-}
-
-/* Start boot */
-window.onload=bootSeq;
-</script>
+        <div class="absolute bottom-6 right-6">
+            <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center cursor-pointer hover:bg-gray-500">
+                <i class="fa-solid fa-question text-xs"></i>
+            </div>
+        </div>
+    </main>
 
 </body>
 </html>
